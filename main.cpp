@@ -103,14 +103,14 @@ string checkd(int counN) {
 				cout << "Число не из промежутка от [0] до [80]!" << endl;
 				cout << "Введите число: ";
 				cin >> number;
-				
+
 			}
 			else {
 				flag = 0;
 			}
 		}
 	}
-	
+
 	if (counN == 7) {  //проверка на должность
 		int c = 0;
 		string arrMonth[12] = { "Доцент", "Профессор", "Ассистент", "Старший_преподаватель", "Заведующий_кафедрой", "Преподаватель" };
@@ -148,7 +148,7 @@ void showMenu1(int menu) {
 }
 void showMenu2(int menu) {
 	setlocale(LC_ALL, "rus");
-	string* text = new string[buttonsCount2]{ "Создание файла по месяцу ", "Создание файла по году ", "Создание файла по имени "};
+	string* text = new string[buttonsCount2]{ "Создание файла по месяцу ", "Создание файла по году ", "Создание файла по имени " };
 	system("cls");
 	cout << "< МЕНЮ ПО СОЗДАНИЮ ФАЙЛОВ >" << endl;
 	for (int i = 0; i < buttonsCount2; i++) {
@@ -252,10 +252,10 @@ bool compareFamelD(const person& s1, const person& s2) {  //сортировка
 bool compareFamelU(const person& s1, const person& s2) {  //сортировка по имени не по алфавиту
 	return s1.famel > s2.famel;
 }
-bool compareNameD(const person& s1, const person& s2) {  
+bool compareNameD(const person& s1, const person& s2) {
 	return s1.name < s2.name;
 }
-bool compareNameU(const person& s1, const person& s2) {  
+bool compareNameU(const person& s1, const person& s2) {
 	return s1.name > s2.name;
 }
 bool compareFNameD(const person& s1, const person& s2) { //сортировка по отчеству
@@ -270,27 +270,27 @@ bool compareYearD(const person& s1, const person& s2) {  //сортировка 
 bool compareYearU(const person& s1, const person& s2) {   //сортировка по дате рождения по убыванию
 	return s1.year > s2.year;
 }
-bool compareMonthD(const person& s1, const person& s2) {  
+bool compareMonthD(const person& s1, const person& s2) {
 	return s1.month < s2.month;
 }
-bool compareMonthU(const person& s1, const person& s2) { 
+bool compareMonthU(const person& s1, const person& s2) {
 	return s1.month > s2.month;
 }
-void printStudents(string namefile, vector <person> &students) {  //Запись и вывод данных о студентах
+void printStudents(string namefile, vector <person>& students) {  //Запись и вывод данных о студентах
 	int i = 0;
-	cout <<endl << left << setw(2) << "№" <<" " << setw(15) << "Фамилия" << setw(15) << "Имя" << setw(15) << "Отчество" << setw(15) << "Стаж" << setw(15) << "Должность" << endl;
+	cout << endl << left << setw(2) << "№" << " " << setw(15) << "Фамилия" << setw(15) << "Имя" << setw(15) << "Отчество" << setw(15) << "Стаж" << setw(15) << "Должность" << endl;
 	cout << "------------------------------------------------------------" << endl;
 	for (const auto& hito : students) {
 		i++;
 		if (i < 10) {
-			cout << i <<" " << left << " " << setw(15) << hito.famel << setw(15) << hito.name << setw(15) << hito.fname << setw(15) << hito.year << setw(15) << hito.month << endl;
+			cout << i << " " << left << " " << setw(15) << hito.famel << setw(15) << hito.name << setw(15) << hito.fname << setw(15) << hito.year << setw(15) << hito.month << endl;
 		}
 		else {
-			cout << i <<" " << left << setw(15) << hito.famel << setw(15) << hito.name << setw(15) << hito.fname << setw(15) << hito.year << setw(15) << hito.month << endl;
+			cout << i << " " << left << setw(15) << hito.famel << setw(15) << hito.name << setw(15) << hito.fname << setw(15) << hito.year << setw(15) << hito.month << endl;
 		}
 	}
 }
-string* addOut(int countPerson, string namefile, vector <person> &students, int oldcount){   //Добавление студентов
+string* addOut(int countPerson, string namefile, vector <person>& students, int oldcount) {   //Добавление студентов
 	ofstream ofile(namefile, fstream::app);
 	string str;
 	person ps;
@@ -314,7 +314,7 @@ string* addOut(int countPerson, string namefile, vector <person> &students, int 
 		cout << "Введите должность: ";
 		str = checkd(7);
 		ps.month = str;
-		ofile << i + 1 << " " << ps.famel << " " << ps.name << " " << ps.fname << " " << ps.year << " " << ps.month  << endl;
+		ofile << i + 1 << " " << ps.famel << " " << ps.name << " " << ps.fname << " " << ps.year << " " << ps.month << endl;
 		students.push_back(ps);
 		cout << "Данные записаны" << endl;
 		cout << "---------------------------------------------------" << endl;
@@ -334,7 +334,7 @@ int returnCount(vector <person>& students, string parametr) {
 		if (hito.month == parametr) {
 			k++;
 		}
-		if (hito.year == stoi(parametr)) {
+		if (to_string(hito.year) == parametr) {
 			k++;
 		}
 		if (hito.name == parametr) {
@@ -349,12 +349,15 @@ void makeFile(string parametr, string nf, vector <person> students) {
 	cout << "\nДанные в файле: " << endl;
 	cout << endl << left << setw(2) << "№" << " " << setw(15) << "Фамилия" << setw(15) << "Имя" << setw(15) << "Отчество" << setw(15) << "Стаж" << setw(15) << "Должность" << endl;
 	cout << "------------------------------------------------------------" << endl;
-	string count = to_string(returnCount(students, parametr));
+	int count = returnCount(students, parametr);
+	if (count == 0)
+		return;
+
 	fileName << count << endl;
 	for (const auto& hito : students) {
 		if (hito.month == parametr) {
 			k++;
-			fileName << k << " " << hito.famel << " " << hito.name << " " << hito.fname << " " << hito.year << " " << hito.month << endl;
+			fileName << k << " " << hito.famel << " " << hito.name << " " << hito.fname << " " << to_string(hito.year) << " " << hito.month << endl;
 			cout << k << " " << left << " " << setw(15) << hito.famel << setw(15) << hito.name << setw(15) << hito.fname << setw(15) << hito.year << setw(15) << hito.month << endl;
 		}
 		if (hito.year == stoi(parametr)) {
@@ -371,7 +374,7 @@ void makeFile(string parametr, string nf, vector <person> students) {
 	}
 	fileName.close();
 }
-void updateMakeFile(string par1, string par2, string par3, string &file1, string &file2, string &file3, vector <person> students) {
+void updateMakeFile(string par1, string par2, string par3, string& file1, string& file2, string& file3, vector <person> students) {
 	ofstream ofile(file1, ios_base::out);
 	if (file1.empty()) {
 	}
@@ -411,7 +414,7 @@ void updateMakeFile(string par1, string par2, string par3, string &file1, string
 	}
 	ofile.close();
 }
- vector <person> fileTo_struct(string nameSort, string& k, string* &arr, vector <person> students) {
+vector <person> fileTo_struct(string nameSort, string& k, string*& arr, vector <person> students) {
 	ifstream ofile(nameSort);
 	cout << "\nОткрытие файла с именем: ..... [" << nameSort << "]" << endl;
 	if (ofile.is_open()) {
@@ -473,14 +476,14 @@ void updateMakeFile(string par1, string par2, string par3, string &file1, string
 	}
 	return students;
 }
-void SelectContiton(int p, string namefile, vector <person> &students, int &countStrok, string *arrData, string &monthForfile, string &yearForfile, string &nameForfile, string &mf, string& yf, string& nf) {
+void SelectContiton(int p, string namefile, vector <person>& students, int& countStrok, string* arrData, string& monthForfile, string& yearForfile, string& nameForfile, string& mf, string& yf, string& nf) {
 	if (p == 1) {
 		string k;
 		string* arr;
 		int yes = 1;
 		while (yes) {
-			int firstP ;
-			int secondP ;
+			int firstP;
+			int secondP;
 			cout << "\nПо убыванию (не по алфавиту ) [1] ///// По возрастанию (по алфавиту) [2]" << endl;
 			firstP = stoi(checkd(2));
 			cout << "\nПо Фамилии [1] ///// По Имени [2] ///// По Отчеству [3] ///// По Году [4] ///// По Месяцу [5]" << endl;
@@ -531,13 +534,13 @@ void SelectContiton(int p, string namefile, vector <person> &students, int &coun
 			}
 			ofstream ofile(namefile, fstream::out);
 			int i = 0;
-			ofile << countStrok <<endl;
+			ofile << countStrok << endl;
 			for (const auto& hito : students) {
 				i++;
 				ofile << i << " " << hito.famel << " " << hito.name << " " << hito.fname << " " << hito.year << " " << hito.month << endl;
 			}
 			printStudents(namefile, students);
-			cout <<"Для завершения сортировки файла нажмите [0]" <<endl << "Для продолжения[1]"<<endl;
+			cout << "Для завершения сортировки файла нажмите [0]" << endl << "Для продолжения[1]" << endl;
 			yes = stoi(checkd(0));
 		}
 
@@ -547,7 +550,7 @@ void SelectContiton(int p, string namefile, vector <person> &students, int &coun
 		cout << "Сколько человек хотите добавить? ";
 		int countPerson;  //количество добавляемых человек
 		countPerson = stoi(checkd(1));
-		ofile <<countStrok + countPerson<< endl;
+		ofile << countStrok + countPerson << endl;
 		int k = 0;
 		for (const auto& hito : students) {
 			k++;
@@ -604,12 +607,12 @@ void SelectContiton(int p, string namefile, vector <person> &students, int &coun
 	if (p == 3) {
 		ofstream ofile(namefile, fstream::out);
 		countStrok--;
-		ofile << countStrok<< endl;
+		ofile << countStrok << endl;
 		printStudents(namefile, students);
 		cout << "Какую строку вы хотите удалить? Введите ее номер: ";
-		int numS, i = 0; 
+		int numS, i = 0;
 		numS = stoi(checkd(1));
-		string* newArr = new string [countStrok];
+		string* newArr = new string[countStrok];
 		auto iter = students.cbegin();
 		students.erase(iter + (numS - 1));
 		for (const auto& hito : students) {
@@ -630,14 +633,14 @@ void SelectContiton(int p, string namefile, vector <person> &students, int &coun
 				cout << i << " " << arrData[i + j - 1] << endl;
 			}
 		}
-		
+
 		auto iter = students.cbegin();
 		students.erase(iter + (numS-1));
 		*/
 		cout << students.size();
 		printStudents(namefile, students);
 		updateMakeFile(monthForfile, yearForfile, nameForfile, mf, yf, nf, students);
-		cout << "\n<Все файлы обновлены>" <<endl;
+		cout << "\n<Все файлы обновлены>" << endl;
 		ofile.close();
 	}
 	if (p == 4) {
@@ -654,7 +657,7 @@ void SelectContiton(int p, string namefile, vector <person> &students, int &coun
 			cin >> mf;
 			mf += 'txt';
 			makeFile(monthForfile, mf, students);
-			cout << "\nФайл с именем: " <<"(" << mf <<")" << " создан по параметру <МЕСЯЦ>" << endl;
+			cout << "\nФайл с именем: " << "(" << mf << ")" << " создан по параметру <МЕСЯЦ>" << endl;
 			ofstream file("file.txt", ios_base::app);
 			file << mf << endl;
 			file.close();
@@ -667,7 +670,7 @@ void SelectContiton(int p, string namefile, vector <person> &students, int &coun
 			cin >> yf;
 			yf += 'txt';
 			makeFile(yearForfile, yf, students);
-			cout << "\nФайл с именем: " << "(" << yf <<")" << " создан по параметру <ГОД>" << endl;
+			cout << "\nФайл с именем: " << "(" << yf << ")" << " создан по параметру <ГОД>" << endl;
 			ofstream file("file.txt", ios_base::app);
 			file << yf << endl;
 			file.close();
@@ -680,7 +683,7 @@ void SelectContiton(int p, string namefile, vector <person> &students, int &coun
 			cin >> nf;
 			nf += 'txt';
 			makeFile(nameForfile, nf, students);
-			cout << "\nФайл с именем: " <<"(" << nf <<")" << " создан по параметру <ИМЯ>" << endl;
+			cout << "\nФайл с именем: " << "(" << nf << ")" << " создан по параметру <ИМЯ>" << endl;
 			ofstream file("file.txt", ios_base::app);
 			file << nf << endl;
 			file.close();
@@ -694,13 +697,13 @@ int main() {
 	fstream fs;
 	string monthForfile, yearForfile, nameForfile, mf, yf, nf;
 	string files = "file.txt";
-	int how = 3, numStudents; 
+	int how = 3, numStudents;
 	ifstream file(files, ios::in | ios::out);
 	string s;
 	cout << "Файлы с данными: " << endl;
 	while (!file.eof()) {   //Вывод имеющихся файлов
 		getline(file, s);
-		cout <<"[" << s <<"]" << endl;
+		cout << "[" << s << "]" << endl;
 	}
 	file.close();
 	cout << "////////// Создать файл - [1] ////////// Использовать имеющийся файл - [2] //////////" << endl;
@@ -736,7 +739,7 @@ int main() {
 			cout << "\n ///// Введите количество человек: /////" << endl;
 			numStudents = stoi(checkd(1));
 			int f = 0;
-			string *arrData = addOut(numStudents, nonAutofile, students, f);
+			string* arrData = addOut(numStudents, nonAutofile, students, f);
 			printStudents(nonAutofile, students);
 			Sleep(3000);
 			system("cls");
@@ -868,4 +871,4 @@ int main() {
 			}
 		}
 	}
-}		
+}
