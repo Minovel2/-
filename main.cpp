@@ -11,7 +11,7 @@
 #include <regex>
 using namespace std;
 const int buttonsCount1 = 5;
-const int buttonsCount2 = 3;
+const int buttonsCount2 = 2;
 bool Engletters(const string& str) {
 	return any_of(str.begin(), str.end(), [](char c) { return isalpha(c); });
 }
@@ -148,7 +148,7 @@ void showMenu1(int menu) {
 }
 void showMenu2(int menu) {
 	setlocale(LC_ALL, "rus");
-	string* text = new string[buttonsCount2]{ "Создание файла по должности ", "Создание файла по стажу ", "Создание файла по имени - не нужно " };
+	string* text = new string[buttonsCount2]{ "Создание файла по должности ", "Создание файла со списком преподавателей в порядке убывания стажа работы " };
 	system("cls");
 	cout << "< МЕНЮ ПО СОЗДАНИЮ ФАЙЛОВ >" << endl;
 	for (int i = 0; i < buttonsCount2; i++) {
@@ -343,31 +343,33 @@ int returnCount(vector <person>& students, string parametr) {
 	}
 	return k;
 }
-void makeFile(string parametr, string nf, vector <person> students) {
+void makeFile(string parametr, string nf, vector <person> students, bool printYear = 0) {
 	int k = 0;
 	ofstream fileName(nf, ios_base::out);
 	cout << "\nДанные в файле: " << endl;
 	cout << endl << left << setw(2) << "№" << " " << setw(15) << "Фамилия" << setw(15) << "Имя" << setw(15) << "Отчество" << setw(15) << "Стаж" << setw(15) << "Должность" << endl;
 	cout << "------------------------------------------------------------" << endl;
 	int count = returnCount(students, parametr);
+	if (printYear)
+		count = students.size();
 
 	fileName << count << endl;
 	for (const auto& hito : students) {
 		if (hito.month == parametr) {
 			k++;
 			fileName << k << " " << hito.famel << " " << hito.name << " " << hito.fname << " " << hito.year << " " << hito.month << endl;
-			cout << k << " " << left << " " << setw(15) << hito.famel << setw(15) << hito.name << setw(15) << hito.fname << setw(15) << hito.year << setw(15) << hito.month << endl;
+			cout << left << setw(2) << k << " " << setw(15) << hito.famel << setw(15) << hito.name << setw(15) << hito.fname << setw(15) << hito.year << setw(15) << hito.month << endl;
 		}
-		if (hito.year == parametr) {
+		if (hito.year == parametr || printYear) {
 			k++;
 			fileName << k << " " << hito.famel << " " << hito.name << " " << hito.fname << " " << hito.year << " " << hito.month << endl;
-			cout << k << " " << left << " " << setw(15) << hito.famel << setw(15) << hito.name << setw(15) << hito.fname << setw(15) << hito.year << setw(15) << hito.month << endl;
+			cout << left << setw(2) << k << " " << setw(15) << hito.famel << setw(15) << hito.name << setw(15) << hito.fname << setw(15) << hito.year << setw(15) << hito.month << endl;
 		}
 		if (hito.name == parametr) {
 			k++;
 			fileName << k << " " << hito.famel << " " << hito.name << " " << hito.fname << " " << hito.year << " " << hito.month << endl;
 			//fileName << k << hito.famel << endl;
-			cout << k << " " << left << " " << setw(15) << hito.famel << setw(15) << hito.name << setw(15) << hito.fname << setw(15) << hito.year << setw(15) << hito.month << endl;
+			cout << left << setw(2) << k << " " << setw(15) << hito.famel << setw(15) << hito.name << setw(15) << hito.fname << setw(15) << hito.year << setw(15) << hito.month << endl;
 		}
 	}
 	fileName.close();
@@ -653,7 +655,7 @@ void SelectContiton(int p, string namefile, vector <person>& students, int& coun
 			monthForfile[0] = toupper(monthForfile[0]);
 			cout << "Введите название файла для сохранения: ";
 			cin >> mf;
-			mf += 'txt';
+			mf += ".txt";
 			makeFile(monthForfile, mf, students);
 			cout << "\nФайл с именем: " << "(" << mf << ")" << " создан по параметру <ДОЛЖНОСТЬ>" << endl;
 			ofstream file("file.txt", ios_base::app);
@@ -661,13 +663,13 @@ void SelectContiton(int p, string namefile, vector <person>& students, int& coun
 			file.close();
 		}
 		else if (p == 2) {
-			cout << "Введите стаж для формирования файла: ";
-			cin >> yearForfile;
-			yearForfile[0] = toupper(yearForfile[0]);
+			string yearForfile;
 			cout << "Введите название файла для сохранения: ";
 			cin >> yf;
-			yf += 'txt';
-			makeFile(yearForfile, yf, students);
+			yf += ".txt";
+			sort(students.begin(), students.end(), compareYearU);
+
+			makeFile(yearForfile, yf, students, 1);
 			cout << "\nФайл с именем: " << "(" << yf << ")" << " создан по параметру <СТАЖ>" << endl;
 			ofstream file("file.txt", ios_base::app);
 			file << yf << endl;
@@ -679,7 +681,7 @@ void SelectContiton(int p, string namefile, vector <person>& students, int& coun
 			nameForfile[0] = toupper(nameForfile[0]);
 			cout << "Введите название файла для сохранения: ";
 			cin >> nf;
-			nf += 'txt';
+			nf += ".txt";
 			makeFile(nameForfile, nf, students);
 			cout << "\nФайл с именем: " << "(" << nf << ")" << " создан по параметру <ИМЯ>" << endl;
 			ofstream file("file.txt", ios_base::app);
@@ -726,7 +728,7 @@ int main() {
 		else {
 			cout << "\n///// Введите имя для названия файла: /////" << endl;
 			cin >> nonAutofile;
-			nonAutofile += 'txt';
+			nonAutofile += ".txt";
 			ofstream file(files, ios_base::app);
 			file << nonAutofile << endl;
 			file.close();
@@ -773,7 +775,7 @@ int main() {
 				else if (howF == 2) {
 					cout << "\n///// Введите имя для открытия файла без .txt или выберите любой файл из списка, и напишите его без t: /////" << endl;
 					cin >> Autofile;
-					Autofile += 'txt';
+					Autofile += ".txt";
 					ifstream ofile(Autofile);
 					cout << Autofile;
 					if (!ofile.is_open()) {
