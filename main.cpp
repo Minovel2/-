@@ -148,7 +148,7 @@ void showMenu1(int menu) {
 }
 void showMenu2(int menu) {
 	setlocale(LC_ALL, "rus");
-	string* text = new string[buttonsCount2]{ "Создание файла по месяцу ", "Создание файла по году ", "Создание файла по имени " };
+	string* text = new string[buttonsCount2]{ "Создание файла по должности ", "Создание файла по стажу ", "Создание файла по имени - не нужно " };
 	system("cls");
 	cout << "< МЕНЮ ПО СОЗДАНИЮ ФАЙЛОВ >" << endl;
 	for (int i = 0; i < buttonsCount2; i++) {
@@ -243,7 +243,7 @@ struct person {
 	string famel;
 	string name;
 	string fname;
-	int year;
+	string year;
 	string month;
 };
 bool compareFamelD(const person& s1, const person& s2) {  //сортировка по имени по алфавиту
@@ -265,10 +265,10 @@ bool compareFNameU(const person& s1, const person& s2) {
 	return s1.fname > s2.fname;
 }
 bool compareYearD(const person& s1, const person& s2) {  //сортировка по дате рождения по возрастанию
-	return s1.year < s2.year;
+	return stoi(s1.year) < stoi(s2.year);
 }
 bool compareYearU(const person& s1, const person& s2) {   //сортировка по дате рождения по убыванию
-	return s1.year > s2.year;
+	return stoi(s1.year) > stoi(s2.year);
 }
 bool compareMonthD(const person& s1, const person& s2) {
 	return s1.month < s2.month;
@@ -310,7 +310,7 @@ string* addOut(int countPerson, string namefile, vector <person>& students, int 
 		ps.fname = str;
 		cout << "Введите стаж работы в годах ";
 		str = checkd(6);
-		ps.year = stoi(str);
+		ps.year = str;
 		cout << "Введите должность: ";
 		str = checkd(7);
 		ps.month = str;
@@ -322,7 +322,7 @@ string* addOut(int countPerson, string namefile, vector <person>& students, int 
 	string* arrData = new string[students.size()];
 	int i = 0;
 	for (const auto& hito : students) {
-		arrData[i] += (hito.famel + " " + hito.name + " " + hito.fname + " " + to_string(hito.year) + " " + hito.month);
+		arrData[i] += (hito.famel + " " + hito.name + " " + hito.fname + " " + hito.year + " " + hito.month);
 		i++;
 	}
 	ofile.close();
@@ -334,7 +334,7 @@ int returnCount(vector <person>& students, string parametr) {
 		if (hito.month == parametr) {
 			k++;
 		}
-		if (to_string(hito.year) == parametr) {
+		if (hito.year == parametr) {
 			k++;
 		}
 		if (hito.name == parametr) {
@@ -350,17 +350,15 @@ void makeFile(string parametr, string nf, vector <person> students) {
 	cout << endl << left << setw(2) << "№" << " " << setw(15) << "Фамилия" << setw(15) << "Имя" << setw(15) << "Отчество" << setw(15) << "Стаж" << setw(15) << "Должность" << endl;
 	cout << "------------------------------------------------------------" << endl;
 	int count = returnCount(students, parametr);
-	if (count == 0)
-		return;
 
 	fileName << count << endl;
 	for (const auto& hito : students) {
 		if (hito.month == parametr) {
 			k++;
-			fileName << k << " " << hito.famel << " " << hito.name << " " << hito.fname << " " << to_string(hito.year) << " " << hito.month << endl;
+			fileName << k << " " << hito.famel << " " << hito.name << " " << hito.fname << " " << hito.year << " " << hito.month << endl;
 			cout << k << " " << left << " " << setw(15) << hito.famel << setw(15) << hito.name << setw(15) << hito.fname << setw(15) << hito.year << setw(15) << hito.month << endl;
 		}
-		if (hito.year == stoi(parametr)) {
+		if (hito.year == parametr) {
 			k++;
 			fileName << k << " " << hito.famel << " " << hito.name << " " << hito.fname << " " << hito.year << " " << hito.month << endl;
 			cout << k << " " << left << " " << setw(15) << hito.famel << setw(15) << hito.name << setw(15) << hito.fname << setw(15) << hito.year << setw(15) << hito.month << endl;
@@ -394,7 +392,7 @@ void updateMakeFile(string par1, string par2, string par3, string& file1, string
 		ofstream ofile(file2, ios_base::out);
 		int k = 0;
 		for (const auto& hito : students) {
-			if (hito.year == stoi(par2)) {
+			if (hito.year == par2) {
 				k++;
 				ofile << k << " " << hito.famel << " " << hito.name << " " << hito.fname << " " << hito.year << " " << hito.month << endl;
 			}
@@ -484,51 +482,51 @@ void SelectContiton(int p, string namefile, vector <person>& students, int& coun
 		while (yes) {
 			int firstP;
 			int secondP;
-			cout << "\nПо убыванию (не по алфавиту ) [1] ///// По возрастанию (по алфавиту) [2]" << endl;
+			cout << "\nПо убыванию [1] ///// По возрастанию [2]" << endl;
 			firstP = stoi(checkd(2));
-			cout << "\nПо Фамилии [1] ///// По Имени [2] ///// По Отчеству [3] ///// По Году [4] ///// По Месяцу [5]" << endl;
+			cout << "\nПо Фамилии [1] ///// По Имени [2] ///// По Отчеству [3] ///// По Стажу [4] ///// По Должности [5]" << endl;
 			secondP = stoi(checkd(4));
 			if (firstP == 1) {
 				if (secondP == 1) {
-					cout << "Сортировка по Фамилии не по алфавиту" << endl;
+					cout << "Сортировка по Фамилии по убыванию" << endl;
 					sort(students.begin(), students.end(), compareFamelU);
 				}
 				if (secondP == 2) {
-					cout << "Сортировка по Имени не по алфавиту" << endl;
+					cout << "Сортировка по Имени по убыванию" << endl;
 					sort(students.begin(), students.end(), compareNameU);
 				}
 				if (secondP == 3) {
-					cout << "Сортировка по Отчеству не по алфавиту" << endl;
+					cout << "Сортировка по Отчеству по убыванию" << endl;
 					sort(students.begin(), students.end(), compareFNameU);
 				}
 				if (secondP == 4) {
-					cout << "Сортировка по Году по убыванию" << endl;
+					cout << "Сортировка по Стажу по убыванию" << endl;
 					sort(students.begin(), students.end(), compareYearU);
 				}
 				if (secondP == 5) {
-					cout << "Сортировка по Месяцу не по алфавиту" << endl;
+					cout << "Сортировка по Должности по убыванию" << endl;
 					sort(students.begin(), students.end(), compareMonthU);
 				}
 			}
 			else {
 				if (secondP == 1) {
-					cout << "Сортировка по Фамилии по алфавиту" << endl;
+					cout << "Сортировка по Фамилии по возрастанию" << endl;
 					sort(students.begin(), students.end(), compareFamelD);
 				}
 				if (secondP == 2) {
-					cout << "Сортировка по Имени по алфавиту" << endl;
+					cout << "Сортировка по Имени по возрастанию" << endl;
 					sort(students.begin(), students.end(), compareNameD);
 				}
 				if (secondP == 3) {
-					cout << "Сортировка по Отчеству по алфавиту" << endl;
+					cout << "Сортировка по Отчеству по возрастанию" << endl;
 					sort(students.begin(), students.end(), compareFNameD);
 				}
 				if (secondP == 4) {
-					cout << "Сортировка по Году по возрастанию" << endl;
+					cout << "Сортировка по Стажу по возрастанию" << endl;
 					sort(students.begin(), students.end(), compareYearD);
 				}
 				if (secondP == 5) {
-					cout << "Сортировка по Месяцу по алфавиту" << endl;
+					cout << "Сортировка по Должности по возрастанию" << endl;
 					sort(students.begin(), students.end(), compareMonthD);
 				}
 			}
@@ -650,27 +648,27 @@ void SelectContiton(int p, string namefile, vector <person>& students, int& coun
 	if (p == 5) {
 		int p = startCycle2();
 		if (p == 1) {
-			cout << "Введите месяц для формирования файла: ";
+			cout << "Введите должность для формирования файла: ";
 			cin >> monthForfile;
 			monthForfile[0] = toupper(monthForfile[0]);
 			cout << "Введите название файла для сохранения: ";
 			cin >> mf;
 			mf += 'txt';
 			makeFile(monthForfile, mf, students);
-			cout << "\nФайл с именем: " << "(" << mf << ")" << " создан по параметру <МЕСЯЦ>" << endl;
+			cout << "\nФайл с именем: " << "(" << mf << ")" << " создан по параметру <ДОЛЖНОСТЬ>" << endl;
 			ofstream file("file.txt", ios_base::app);
 			file << mf << endl;
 			file.close();
 		}
 		else if (p == 2) {
-			cout << "Введите год для формирования файла: ";
+			cout << "Введите стаж для формирования файла: ";
 			cin >> yearForfile;
 			yearForfile[0] = toupper(yearForfile[0]);
 			cout << "Введите название файла для сохранения: ";
 			cin >> yf;
 			yf += 'txt';
 			makeFile(yearForfile, yf, students);
-			cout << "\nФайл с именем: " << "(" << yf << ")" << " создан по параметру <ГОД>" << endl;
+			cout << "\nФайл с именем: " << "(" << yf << ")" << " создан по параметру <СТАЖ>" << endl;
 			ofstream file("file.txt", ios_base::app);
 			file << yf << endl;
 			file.close();
@@ -840,7 +838,7 @@ int main() {
 									ps.fname = patt;
 								}
 								if (k == 4) {
-									ps.year = stoi(patt);
+									ps.year = patt;
 								}
 								if (k == 5) {
 									ps.month = patt;
