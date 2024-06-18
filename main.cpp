@@ -827,8 +827,8 @@ int main() {
 					cout << countStrok << " человек в списке" << endl << "\n";
 					int CountPerson = stoi(countStrok);
 					string* arrData = new string[stoi(countStrok)];  //массив из строк файла
-					cout << endl << left << setw(famelSize) << "Фамилия" << " " << setw(nameSize) << "Имя" << " " << setw(fnameSize) << "Отчество" << " " << setw(yearSize) << "Стаж" << " " << setw(monthSize) << "Должность" << " " << endl;
-					cout << getBigLine(35) << endl;
+					//cout << endl << left << setw(famelSize) << "Фамилия" << " " << setw(nameSize) << "Имя" << " " << setw(fnameSize) << "Отчество" << " " << setw(yearSize) << "Стаж" << " " << setw(monthSize) << "Должность" << " " << endl;
+					//cout << getBigLine(35) << endl;
 					for (int i = 0; i < CountPerson; i++) {
 						getline(ofile, s);
 						string s1;
@@ -846,7 +846,7 @@ int main() {
 						string word1, word2, word3, word4, word5;
 						istringstream iss(s1);
 						iss >> word1 >> word2 >> word3 >> word4 >> word5;
-						cout << left << setw(famelSize) << word1 << " " << setw(nameSize) << word2 << " " << setw(fnameSize) << word3 << " " << setw(yearSize) << word4 << " " << setw(monthSize) << word5 << endl;
+						//cout << left << setw(famelSize) << word1 << " " << setw(nameSize) << word2 << " " << setw(fnameSize) << word3 << " " << setw(yearSize) << word4 << " " << setw(monthSize) << word5 << endl;
 					}
 					person ps;
 					for (int i = 0; i < CountPerson; i++) {
@@ -885,6 +885,7 @@ int main() {
 						students.push_back(ps);
 					}
 					updateSizes(students);
+					printStudents("tmp", students);
 					int yes = 1;
 					while (yes) {
 						cout << "Для выхода из программы нажмите [2] ///// Для продолжения [1]" << endl;
