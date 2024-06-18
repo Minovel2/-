@@ -12,6 +12,14 @@
 using namespace std;
 const int buttonsCount1 = 5;
 const int buttonsCount2 = 2;
+string getBigLine(int n) {
+	string s = "\n";
+	for (int i = 0; i < n; i++) {
+		s += '-';
+	}
+	s += '\n';
+	return s;
+}
 bool Engletters(const string& str) {
 	return any_of(str.begin(), str.end(), [](char c) { return isalpha(c); });
 }
@@ -239,6 +247,7 @@ int startCycle2() {
 		}
 	}
 }
+int famelSize, nameSize, fnameSize, yearSize, monthSize, idSize;
 struct person {
 	string famel;
 	string name;
@@ -246,6 +255,34 @@ struct person {
 	string year;
 	string month;
 };
+void updateSizes(vector<person>& p) {
+	famelSize = 15, nameSize = 15, fnameSize = 15, yearSize = 5, monthSize = 15, idSize = 3;
+	int k = 1, idSizeCounter = 0;
+	for (person& m : p) {
+		if (k % 10 == 0) {
+			idSizeCounter++;
+		}
+		if (m.famel.length() > famelSize) {
+			famelSize = m.famel.length();
+		}
+		if (m.name.length() > nameSize) {
+			nameSize = m.name.length();
+		}
+		if (m.fname.length() > fnameSize) {
+			fnameSize = m.fname.length();
+		}
+		if (m.year.length() > yearSize) {
+			yearSize = m.year.length();
+		}
+		if (m.month.length() > monthSize) {
+			monthSize = m.month.length();
+		}
+		k++;
+	}
+
+	if (idSizeCounter > idSize)
+		idSize = idSizeCounter;
+}
 bool compareFamelD(const person& s1, const person& s2) {  //сортировка по имени по алфавиту
 	return s1.famel < s2.famel;
 }
@@ -278,16 +315,11 @@ bool compareMonthU(const person& s1, const person& s2) {
 }
 void printStudents(string namefile, vector <person>& students) {  //Запись и вывод данных о студентах
 	int i = 0;
-	cout << endl << left << setw(2) << "№" << " " << setw(15) << "Фамилия" << setw(15) << "Имя" << setw(15) << "Отчество" << setw(15) << "Стаж" << setw(15) << "Должность" << endl;
-	cout << "------------------------------------------------------------" << endl;
+	cout << endl << left << setw(idSize) << "№" << " " << setw(famelSize) << "Фамилия" << " " << setw(nameSize) << "Имя" << " " << setw(fnameSize) << "Отчество" << " " << setw(yearSize) << "Стаж" << " " << setw(monthSize) << "Должность" << " " << endl;
+	cout << getBigLine(idSize + famelSize + nameSize + fnameSize + yearSize + monthSize + 5) << endl;
 	for (const auto& hito : students) {
 		i++;
-		if (i < 10) {
-			cout << i << " " << left << " " << setw(15) << hito.famel << setw(15) << hito.name << setw(15) << hito.fname << setw(15) << hito.year << setw(15) << hito.month << endl;
-		}
-		else {
-			cout << i << " " << left << setw(15) << hito.famel << setw(15) << hito.name << setw(15) << hito.fname << setw(15) << hito.year << setw(15) << hito.month << endl;
-		}
+		cout << left << setw(idSize) << i << " " << setw(famelSize) << hito.famel << " " << setw(nameSize) << hito.name << " " << setw(fnameSize) << hito.fname << " " << setw(yearSize) << hito.year << " " << setw(monthSize) << hito.month << endl;
 	}
 }
 string* addOut(int countPerson, string namefile, vector <person>& students, int oldcount) {   //Добавление студентов
@@ -317,7 +349,7 @@ string* addOut(int countPerson, string namefile, vector <person>& students, int 
 		ofile << i + 1 << " " << ps.famel << " " << ps.name << " " << ps.fname << " " << ps.year << " " << ps.month << endl;
 		students.push_back(ps);
 		cout << "Данные записаны" << endl;
-		cout << "---------------------------------------------------" << endl;
+		cout << getBigLine(idSize + famelSize + nameSize + fnameSize + yearSize + monthSize + 5) << endl;
 	}
 	string* arrData = new string[students.size()];
 	int i = 0;
@@ -347,8 +379,8 @@ void makeFile(string parametr, string nf, vector <person> students, bool printYe
 	int k = 0;
 	ofstream fileName(nf, ios_base::out);
 	cout << "\nДанные в файле: " << endl;
-	cout << endl << left << setw(2) << "№" << " " << setw(15) << "Фамилия" << setw(15) << "Имя" << setw(15) << "Отчество" << setw(15) << "Стаж" << setw(15) << "Должность" << endl;
-	cout << "------------------------------------------------------------" << endl;
+	cout << endl << left << setw(idSize) << "№" << " " << setw(famelSize) << "Фамилия" << " " << setw(nameSize) << "Имя" << " " << setw(fnameSize) << "Отчество" << " " << setw(yearSize) << "Стаж" << " " << setw(monthSize) << "Должность" << " " << endl;
+	cout << getBigLine(idSize + famelSize + nameSize + fnameSize + yearSize + monthSize + 5) << endl;
 	int count = returnCount(students, parametr);
 	if (printYear)
 		count = students.size();
@@ -358,18 +390,18 @@ void makeFile(string parametr, string nf, vector <person> students, bool printYe
 		if (hito.month == parametr) {
 			k++;
 			fileName << k << " " << hito.famel << " " << hito.name << " " << hito.fname << " " << hito.year << " " << hito.month << endl;
-			cout << left << setw(2) << k << " " << setw(15) << hito.famel << setw(15) << hito.name << setw(15) << hito.fname << setw(15) << hito.year << setw(15) << hito.month << endl;
+			cout << left << setw(idSize) << k << " " << setw(famelSize) << hito.famel << " " << setw(nameSize) << hito.name << " " << setw(fnameSize) << hito.fname << " " << setw(yearSize) << hito.year << " " << setw(monthSize) << hito.month << endl;
 		}
 		if (hito.year == parametr || printYear) {
 			k++;
 			fileName << k << " " << hito.famel << " " << hito.name << " " << hito.fname << " " << hito.year << " " << hito.month << endl;
-			cout << left << setw(2) << k << " " << setw(15) << hito.famel << setw(15) << hito.name << setw(15) << hito.fname << setw(15) << hito.year << setw(15) << hito.month << endl;
+			cout << left << setw(idSize) << k << " " << setw(famelSize) << hito.famel << " " << setw(nameSize) << hito.name << " " << setw(fnameSize) << hito.fname << " " << setw(yearSize) << hito.year << " " << setw(monthSize) << hito.month << endl;
 		}
 		if (hito.name == parametr) {
 			k++;
 			fileName << k << " " << hito.famel << " " << hito.name << " " << hito.fname << " " << hito.year << " " << hito.month << endl;
 			//fileName << k << hito.famel << endl;
-			cout << left << setw(2) << k << " " << setw(15) << hito.famel << setw(15) << hito.name << setw(15) << hito.fname << setw(15) << hito.year << setw(15) << hito.month << endl;
+			cout << left << setw(idSize) << k << " " << setw(famelSize) << hito.famel << " " << setw(nameSize) << hito.name << " " << setw(fnameSize) << hito.fname << " " << setw(yearSize) << hito.year << " " << setw(monthSize) << hito.month << endl;
 		}
 	}
 	fileName.close();
@@ -573,14 +605,15 @@ void SelectContiton(int p, string namefile, vector <person>& students, int& coun
 			ps.fname = str;
 			cout << "Введите стаж работы в годах: ";
 			str = checkd(6);
-			ps.year = stoi(str);
+			ps.year = str;
 			cout << "Введите должность: ";
 			str = checkd(7);;
 			ps.month = str;
 			ofile << i + 1 + countStrok << " " << ps.famel << " " << ps.name << " " << ps.fname << " " << ps.year << " " << ps.month << endl;
 			students.push_back(ps);
+			updateSizes(students);
 			cout << "Данные записаны" << endl;
-			cout << "---------------------------------------------------" << endl;
+			cout << getBigLine(idSize + famelSize + nameSize + fnameSize + yearSize + monthSize + 5) << endl;
 		}
 		string* arrData1 = new string[students.size()];
 		int i = 0;
@@ -638,6 +671,7 @@ void SelectContiton(int p, string namefile, vector <person>& students, int& coun
 		students.erase(iter + (numS-1));
 		*/
 		cout << students.size();
+		updateSizes(students);
 		printStudents(namefile, students);
 		updateMakeFile(monthForfile, yearForfile, nameForfile, mf, yf, nf, students);
 		cout << "\n<Все файлы обновлены>" << endl;
@@ -793,8 +827,8 @@ int main() {
 					cout << countStrok << " человек в списке" << endl << "\n";
 					int CountPerson = stoi(countStrok);
 					string* arrData = new string[stoi(countStrok)];  //массив из строк файла
-					cout << std::left << setw(15) << "Фамилия" << setw(15) << "Имя" << setw(15) << "Отчество" << setw(15) << "Стаж" << setw(15) << "Должность" << endl;
-					cout << "------------------------------------------------------------" << endl;
+					cout << endl << left << setw(famelSize) << "Фамилия" << " " << setw(nameSize) << "Имя" << " " << setw(fnameSize) << "Отчество" << " " << setw(yearSize) << "Стаж" << " " << setw(monthSize) << "Должность" << " " << endl;
+					cout << getBigLine(35) << endl;
 					for (int i = 0; i < CountPerson; i++) {
 						getline(ofile, s);
 						string s1;
@@ -812,7 +846,7 @@ int main() {
 						string word1, word2, word3, word4, word5;
 						istringstream iss(s1);
 						iss >> word1 >> word2 >> word3 >> word4 >> word5;
-						cout << left << setw(15) << word1 << setw(15) << word2 << setw(15) << word3 << setw(15) << word4 << setw(15) << word5 << endl;
+						cout << left << setw(famelSize) << word1 << " " << setw(nameSize) << word2 << " " << setw(fnameSize) << word3 << " " << setw(yearSize) << word4 << " " << setw(monthSize) << word5 << endl;
 					}
 					person ps;
 					for (int i = 0; i < CountPerson; i++) {
@@ -850,6 +884,7 @@ int main() {
 						}
 						students.push_back(ps);
 					}
+					updateSizes(students);
 					int yes = 1;
 					while (yes) {
 						cout << "Для выхода из программы нажмите [2] ///// Для продолжения [1]" << endl;
